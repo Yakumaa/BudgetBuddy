@@ -3,6 +3,9 @@ from django.views import View
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
+
+# from django.core.validators import validate_email
+from validate_email import validate_email
 import json
 
 
@@ -20,7 +23,7 @@ class UsernameValidationView(View):
         if not str(username).isalnum():
             return JsonResponse(
                 {
-                    "username error": "username should only contain alpha numeric characters"
+                    "username_error": "username should only contain alpha numeric characters"
                 },
                 status=400,
             )
@@ -30,3 +33,21 @@ class UsernameValidationView(View):
             return redirect("register")
 
         return JsonResponse({"username_valid": True})
+
+
+class EmailValidationView(View):
+    def post(self, request):
+        data = json.loads(request.body)
+        email = data["email"]
+
+        if not validate_email(email):
+            return JsonResponse(
+                {"email_error": "email is invalid"},
+                status=400,
+            )
+
+        if User.objects.filter(email=email).exists():
+            messages.info(request, "email already in use")
+            return redirect("register")
+
+        return JsonResponse({"email_valid": True})
