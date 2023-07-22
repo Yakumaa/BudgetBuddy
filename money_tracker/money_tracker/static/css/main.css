@@ -70,11 +70,21 @@
     z-index: 1500;
 }
 
-.showPasswordToggle{
+.showPasswordToggle {
     cursor: pointer;
     transition: all;
     position: absolute;
     top: 46%;
+    right: 67px; /* Adjust the value to control the distance from the right edge */
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.showPasswordToggleRepeat{
+    cursor: pointer;
+    transition: all;
+    position: absolute;
+    top: 57%;
     right: 67px; /* Adjust the value to control the distance from the right edge */
     transform: translateY(-50%);
     cursor: pointer;
@@ -86,6 +96,14 @@
   }
   
 .showPasswordToggle.active i {
+    color: #007bff; /* Icon color when toggled */
+}
+
+.showPasswordToggleRepeat i {
+    color: #666; /* Icon color when not toggled */
+  }
+  
+.showPasswordToggleRepeat.active i {
     color: #007bff; /* Icon color when toggled */
 }
 

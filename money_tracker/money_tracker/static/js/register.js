@@ -1,10 +1,11 @@
 const usernameField= document.querySelector("#usernameField");
 const emailField = document.querySelector("#emailField");
 const showPasswordToggle = document.querySelector(".showPasswordToggle");
-const togglePasswordButton = document.querySelector("togglePasswordButton");
+const showPasswordToggleRepeat = document.querySelector(".showPasswordToggleRepeat");
 const feedBackArea= document.querySelector('.invalid_feedback');
 const emailFeedBackArea = document.querySelector(".emailFeedBackArea");
 const passwordField = document.querySelector("#passwordField");
+const repeatPasswordField = document.querySelector("#repeatPasswordField");
 const usernameSuccessOutput = document.querySelector('.usernameSuccessOutput');
 
 usernameField.addEventListener("keyup", (e) => {
@@ -56,16 +57,23 @@ emailField.addEventListener("keyup", (e) => {
     }
 })
 
-const handleToggleInput = (e) => {
-    if (passwordField.type === "password") {
-        passwordField.type = "text";
-        showPasswordToggle.innerHTML = '<i class="bi-eye"></i>';
-        showPasswordToggle.classList.add("active");
-      } else {
-        passwordField.type = "password";
-        showPasswordToggle.innerHTML = '<i class="bi bi-eye-slash"></i>';
-        showPasswordToggle.classList.remove("active"); 
-      }
-};
 
-showPasswordToggle.addEventListener("click", handleToggleInput);
+const handleToggleInput = (field, toggleElement) => {
+    if (field.type === "password") {
+      field.type = "text";
+      toggleElement.innerHTML = '<i class="bi-eye"></i>';
+      toggleElement.classList.add("active");
+    } else {
+      field.type = "password";
+      toggleElement.innerHTML = '<i class="bi bi-eye-slash"></i>';
+      toggleElement.classList.remove("active");
+    }
+  };
+  
+  showPasswordToggle.addEventListener("click", () => {
+    handleToggleInput(passwordField, showPasswordToggle);
+  });
+  
+  showPasswordToggleRepeat.addEventListener("click", () => {
+    handleToggleInput(repeatPasswordField, showPasswordToggleRepeat);
+  });
