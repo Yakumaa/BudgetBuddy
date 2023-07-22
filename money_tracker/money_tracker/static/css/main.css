@@ -69,3 +69,26 @@
 .bd-mode-toggle {
     z-index: 1500;
 }
+
+.showPasswordToggle{
+    cursor: pointer;
+    transition: all;
+    position: absolute;
+    top: 46%;
+    right: 67px; /* Adjust the value to control the distance from the right edge */
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+/* Optional: Style the icon */
+.showPasswordToggle i {
+    color: #666; /* Icon color when not toggled */
+  }
+  
+.showPasswordToggle.active i {
+    color: #007bff; /* Icon color when toggled */
+}
+
+::-ms-reveal {
+    display: none;
+}
