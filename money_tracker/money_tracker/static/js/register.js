@@ -7,6 +7,7 @@ const emailFeedBackArea = document.querySelector(".emailFeedBackArea");
 const passwordField = document.querySelector("#passwordField");
 const repeatPasswordField = document.querySelector("#repeatPasswordField");
 const usernameSuccessOutput = document.querySelector('.usernameSuccessOutput');
+const submitBtn = document.querySelector(".submit-btn");
 
 usernameField.addEventListener("keyup", (e) => {
     const usernameVal = e.target.value;
@@ -22,12 +23,15 @@ usernameField.addEventListener("keyup", (e) => {
         })
         .then((res) => res.json())
         .then((data) => {
-            console.log("data", data);
             usernameSuccessOutput.style.display = 'none';
             if(data.username_error){
+                submitBtn.disabled = true;
                 usernameField.classList.add("is-invalid");
                 feedBackArea.style.display="block";
                 feedBackArea.innerHTML= `<p>${data.username_error}</p>`
+            }
+            else{
+                submitBtn.removeAttribute("disabled");
             }
         });
     }
@@ -49,9 +53,13 @@ emailField.addEventListener("keyup", (e) => {
         .then((data) => {
             console.log("data", data);
             if(data.email_error){
+                submitBtn.disabled = true;
                 emailField.classList.add("is-invalid");
                 emailFeedBackArea.style.display="block";
                 emailFeedBackArea.innerHTML= `<p>${data.email_error}</p>`
+            }
+            else{
+                submitBtn.removeAttribute("disabled");
             }
         });
     }
@@ -68,12 +76,26 @@ const handleToggleInput = (field, toggleElement) => {
       toggleElement.innerHTML = '<i class="bi bi-eye-slash"></i>';
       toggleElement.classList.remove("active");
     }
-  };
+};
   
-  showPasswordToggle.addEventListener("click", () => {
-    handleToggleInput(passwordField, showPasswordToggle);
-  });
+showPasswordToggle.addEventListener("click", () => {
+handleToggleInput(passwordField, showPasswordToggle);
+});
+
+showPasswordToggleRepeat.addEventListener("click", () => {
+handleToggleInput(repeatPasswordField, showPasswordToggleRepeat);
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+const form = document.getElementById("registrationForm");
+const termsCheckbox = document.getElementById("termsCheckbox");
+
+form.addEventListener("submit", (e) => {
+    if (!termsCheckbox.checked) {
+    e.preventDefault();
+    alert("Please agree to the terms and services before proceeding.");
+    }
+});
+});
   
-  showPasswordToggleRepeat.addEventListener("click", () => {
-    handleToggleInput(repeatPasswordField, showPasswordToggleRepeat);
-  });

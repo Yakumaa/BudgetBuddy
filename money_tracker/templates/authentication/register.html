@@ -61,48 +61,72 @@
         <div class="card-body p-5">
             <h2 class="text-uppercase text-center mb-4">Create an account</h2>
 
-            <form action="{% url 'register' %}" method = "post">
+            <form id="registrationForm" action="{% url 'register' %}" method = "post" autocomplete="off">
             
                 {% csrf_token %}
 
                 {% include 'partials/_messages.html' %}
             <div class="form-outline mb-4">
-                <input type="text" id="usernameField" class="form-control form-control-sm" name="username" placeholder="username"/>
+                <input 
+                    type="text" 
+                    id="usernameField" 
+                    class="form-control form-control-sm" 
+                    name="username" 
+                    placeholder="username"
+                    value = "{{fieldValues.username}}"/>
             </div>
             <div class="invalid_feedback invalid-feedback" style="display:none">
             </div>
             <p class="text-sm text-success usernameSuccessOutput"></p>
 
             <div class="form-outline mb-4">
-                <input type="email" id="emailField" class="form-control form-control-sm" name="email" placeholder="Email"/>
+                <input 
+                    type="email" 
+                    id="emailField" 
+                    class="form-control form-control-sm" 
+                    name="email" 
+                    placeholder="Email"
+                    value = "{{fieldValues.email}}"/>
             </div>
             <div class="emailFeedBackArea invalid-feedback" style="display:none">
             </div>
 
             <div class="form-outline mb-4 position-relative">
-                <input type="password" id="passwordField" class="form-control form-control-sm" name="password" placeholder="password" inputmode="none"/>
+                <input 
+                    type="password" 
+                    id="passwordField" 
+                    class="form-control form-control-sm" 
+                    name="password" 
+                    placeholder="password" 
+                    inputmode="none"/>
                 <span class="showPasswordToggle">
                     <i class="bi bi-eye-slash"></i>
                 </span>
             </div>
 
             <div class="form-outline mb-4 position-relative">
-                <input type="password" id="repeatPasswordField" class="form-control form-control-sm" name="repeat_password" placeholder="repeat password" inputmode="none"/>
+                <input 
+                    type="password" 
+                    id="repeatPasswordField" 
+                    class="form-control form-control-sm" 
+                    name="repeat_password" 
+                    placeholder="repeat password" 
+                    inputmode="none"/>
                 <span class="showPasswordToggleRepeat">
                     <i class="bi bi-eye-slash"></i>
                 </span>
             </div>
 
             <div class="form-check d-flex justify-content-center mb-3">
-                <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3cg" />
-                <label class="form-check-label" for="form2Example3g">
+                <input class="form-check-input me-2" type="checkbox" value="" id="termsCheckbox" />
+                <label class="form-check-label" for="termsCheckbox">
                 I agree all statements in <a href="#!" class="text-body"><u>Terms of service</u></a>
                 </label>
             </div>
 
             <div class="d-flex justify-content-center">
                 <button type="submit"
-                class="btn btn-success btn-block btn-sm ">Register</button>
+                class="btn btn-success btn-block btn-sm submit-btn">Register</button>
             </div>
 
             <p class="text-center text-muted mt-3 mb-0">Have already an account? <a href="#!"

@@ -131,4 +131,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-MESSAGES_TAGS = {messages.ERROR: "danger"}
+MESSAGE_TAGS = {messages.ERROR: "danger"}
