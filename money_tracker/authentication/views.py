@@ -14,6 +14,13 @@ class RegistrationView(View):
     def get(self, request):
         return render(request, "authentication/register.html")
 
+    def post(self, request):
+        messages.success(request, "Success")
+        messages.warning(request, "Warning")
+        messages.info(request, "Info")
+        messages.error(request, "Error")
+        return render(request, "authentication/register.html")
+
 
 class UsernameValidationView(View):
     def post(self, request):
