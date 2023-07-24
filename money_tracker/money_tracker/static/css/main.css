@@ -70,12 +70,16 @@
     z-index: 1500;
 }
 
+.form-outline{
+    position: relative;
+}
+
 .showPasswordToggle {
     cursor: pointer;
     transition: all;
     position: absolute;
     top: 46%;
-    right: 67px; /* Adjust the value to control the distance from the right edge */
+    right: 15px; /* Adjust the value to control the distance from the right edge */
     transform: translateY(-50%);
     cursor: pointer;
 }
@@ -85,7 +89,7 @@
     transition: all;
     position: absolute;
     top: 57%;
-    right: 67px; /* Adjust the value to control the distance from the right edge */
+    right: 15px; /* Adjust the value to control the distance from the right edge */
     transform: translateY(-50%);
     cursor: pointer;
 }
