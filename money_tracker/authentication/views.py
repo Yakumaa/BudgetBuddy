@@ -3,6 +3,8 @@ from django.views import View
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.core.mail import EmailMessage, send_mail
+from django.conf import settings
 
 # from django.core.validators import validate_email
 from validate_email import validate_email
@@ -35,7 +37,26 @@ class RegistrationView(View):
                     else:
                         user = User.objects.create_user(username=username, email=email)
                         user.set_password(password)
+                        user.is_active = False
                         user.save()
+
+                        email_subject = "Activate your account"
+                        email_body = "test"
+                        # email = EmailMessage(
+                        #     email_subject,
+                        #     email_body,
+                        #     settings.EMAIL_HOST_USER,
+                        #     [email],
+                        # )
+
+                        # email.send(fail_silently=False)
+                        send_mail(
+                            email_subject,
+                            email_body,
+                            settings.EMAIL_HOST_USER,
+                            [email],
+                            fail_silently=True,
+                        )
                         messages.success(request, "Account successfully created!")
                         return render(request, "authentication/register.html")
                 else:
@@ -59,8 +80,7 @@ class UsernameValidationView(View):
             )
 
         if User.objects.filter(username=username).exists():
-            messages.info(request, "username taken")
-            return redirect("register")
+            return JsonResponse({"username_error": "username taken"}, status=409)
 
         return JsonResponse({"username_valid": True})
 
@@ -77,7 +97,6 @@ class EmailValidationView(View):
             )
 
         if User.objects.filter(email=email).exists():
-            messages.info(request, "email already in use")
-            return redirect("register")
+            return JsonResponse({"email_error": "email already in use"}, status=409)
 
         return JsonResponse({"email_valid": True})
