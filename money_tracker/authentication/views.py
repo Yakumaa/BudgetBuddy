@@ -8,7 +8,7 @@ from django.core.mail import EmailMessage, send_mail
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.utils.encoding import force_bytes
+from django.utils.encoding import force_bytes, force_str
 from .utils import token_generator
 
 # from django.core.validators import validate_email
@@ -59,7 +59,7 @@ class RegistrationView(View):
                         email_body = (
                             "Hi "
                             + user.username
-                            + " Use this link to verify your account\n"
+                            + ". Use this link to verify your account\n"
                             + activate_url
                         )
                         # email = EmailMessage(
@@ -124,6 +124,25 @@ class EmailValidationView(View):
 
 class VerificationView(View):
     def get(self, request, uidb64, token):
+        try:
+            id = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=id)
+
+            if not token_generator.check_token(user, token):
+                return redirect("login" + "?message=" + "User already activated")
+
+            if user.is_active:
+                return redirect("login")
+
+            user.is_active = True
+            user.save()
+
+            messages.success(request, "Account activated Successfully")
+            return redirect("login")
+
+        except Exception as ex:
+            pass
+
         return redirect("login")
 
 
