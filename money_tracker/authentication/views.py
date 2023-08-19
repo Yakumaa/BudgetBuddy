@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.views import View
 from django.http import JsonResponse
 from django.contrib.auth.models import User
-from django.contrib import messages
+from django.contrib import messages, auth
 from django.core.mail import EmailMessage, send_mail
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
@@ -149,3 +149,36 @@ class VerificationView(View):
 class LoginView(View):
     def get(self, request):
         return render(request, "authentication/login.html")
+
+    def post(self, request):
+        username = request.POST["username"]
+        password = request.POST["password"]
+
+        if username and password:
+            user = auth.authenticate(username=username, password=password)
+
+            if user:
+                if user.is_active:
+                    auth.login(request, user)
+                    messages.success(
+                        request, "Welcome, " + user.username + " you are now logged in"
+                    )
+                    return redirect("expenses")
+
+                messages.error(
+                    request, "Account is not active, Please check your email"
+                )
+                return render(request, "authentication/login.html")
+
+            messages.error(request, "Invalid Credentials, Please try again")
+            return render(request, "authentication/login.html")
+
+        messages.error(request, "Please fill all the fields")
+        return render(request, "authentication/login.html")
+
+
+class LogoutView(View):
+    def post(self, request):
+        auth.logout(request)
+        messages.success(request, "You have been logged out")
+        return redirect("login")

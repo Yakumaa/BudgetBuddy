@@ -1,11 +1,57 @@
 {% extends 'base_auth.html' %}
-
+{% load static %}
 {{% block content %}
 
-<div class ="card">
-    <div class="card-body">
-        <h1>login</h1>
+<div class="mask d-flex align-items-center h-20 gradient-custom-3">
+<div class="container h-20">
+    <div class="row d-flex justify-content-center align-items-center h-20">
+    <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+        <div class="card" style="border-radius: 15px;">
+        <div class="card-body p-5">
+            <h2 class="text-uppercase text-center mb-4">Login to your account</h2>
+
+            <form action="{% url 'login' %}" method = "post" autocomplete="off">
+            
+                {% csrf_token %}
+
+                {% include 'partials/_messages.html' %}
+
+                <div class="form-outline mb-4">
+                    <input 
+                        type="text" 
+                        id="usernameField" 
+                        class="form-control form-control-sm" 
+                        name="username" 
+                        placeholder="username"
+                        value = "{{fieldValues.username}}"/>
+                </div>
+
+                <div class="form-outline mb-4 position-relative">
+                    <input 
+                        type="password" 
+                        id="passwordField" 
+                        class="form-control form-control-sm" 
+                        name="password" 
+                        placeholder="password" 
+                        inputmode="none"/>
+                    <span class="showPasswordToggle">
+                        <i class="bi bi-eye-slash"></i>
+                    </span>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <button type="submit"
+                    class="btn btn-success btn-block btn-sm submit-btn">Login</button>
+                </div>
+
+            </form>
+
+        </div>
+        </div>
+    </div>
     </div>
 </div>
+</div>
 
+<script src='{% static 'js/login.js' %}'></script>
 {% endblock content %}}
