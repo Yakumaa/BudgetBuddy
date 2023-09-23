@@ -5,8 +5,8 @@ from django.utils.timezone import now
 
 # Create your models here.
 class Expense(models.Model):
-    amount = models.DecimalField(max_digits=5, decimal_places=2)
-    date = models.DateField(default=now)
+    amount = models.FloatField()
+    date = models.DateField(blank=True, null=True)  # TODO: might have to change this
     description = models.TextField()
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
     category = models.CharField(max_length=255)
