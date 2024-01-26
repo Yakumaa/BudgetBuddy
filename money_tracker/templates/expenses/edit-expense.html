@@ -4,7 +4,7 @@
 
 <div class="container mt-4">
   <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-11">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
@@ -17,8 +17,8 @@
       </nav>
     </div>
 
-    <div class="col-md-2">
-      <a href="{% url 'expense-delete' expense.id %}" class="btn btn-danger btn-sm">Delete</a>  <!--TODO: add confirm delete modal-- >
+    <div class="col-md-1">
+      <a href="{% url 'expense-delete' expense.id %}" class="btn btn-danger btn-sm">Delete</a>  <!--TODO: add delte confirmation modal-->
     </div>
   </div>
 
