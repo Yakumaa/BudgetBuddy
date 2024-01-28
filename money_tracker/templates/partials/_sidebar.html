@@ -72,12 +72,13 @@
               </a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item text-nowrap">
               <form action="{% url 'logout' %}" method="POST">
                   {% csrf_token %}
                   <a class="nav-link d-flex align-items-center gap-2" href="#">
                       <svg class="bi"><use xlink:href="#door-closed"></use></svg>
                       <input type="submit" value="Sign out" class="btn btn-link p-0 text-decoration-none text-capitalize" />
+                      <span class="nav-link" href="">({{request.user.username}})</span>
                   </a>
               </form>
             </li>
