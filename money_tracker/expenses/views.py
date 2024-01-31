@@ -42,6 +42,7 @@ def search_expenses(request):
         return JsonResponse(list(data), safe=False)
 
 
+@login_required(login_url="/authentication/login")
 def add_expense(request):
     catergories = Category.objects.all()
     context = {"categories": catergories, "values": request.POST}
@@ -76,6 +77,7 @@ def add_expense(request):
         return redirect("expenses")
 
 
+@login_required(login_url="/authentication/login")
 def expense_edit(request, id):
     expense = Expense.objects.get(pk=id)
     categories = Category.objects.all()
