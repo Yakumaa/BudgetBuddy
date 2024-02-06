@@ -1,0 +1,33 @@
+#header {
+  width: auto;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  background: seagreen;
+  color: var(--header-color);
+  overflow: hidden;
+}
+
+#branding h1{
+  color: beige
+}
+
+div.breadcrumbs {
+  background: teal;
+  padding: 10px 40px;
+  border: none;
+  color: var(--breadcrumbs-fg);
+  text-align: left;
+}
+
+.module h2, .module caption, .inline-group h2 {
+  margin: 0;
+  padding: 8px;
+  font-weight: 400;
+  font-size: 0.8125rem;
+  text-align: left;
+  background: teal;
+  color: var(--header-link-color);
+}
