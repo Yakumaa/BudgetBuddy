@@ -5,6 +5,7 @@ from .views import (
     EmailValidationView,
     VerificationView,
     LoginView,
+    RequestPasswordResetEmail,
 )
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
@@ -24,4 +25,9 @@ urlpatterns = [
         name="validate-email",
     ),
     path("activate/<uidb64>/<token>", VerificationView.as_view(), name="activate"),
+    path(
+        "request-reset-link",
+        RequestPasswordResetEmail.as_view(),
+        name="request-password",
+    ),
 ]

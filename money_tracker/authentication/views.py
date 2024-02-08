@@ -182,3 +182,43 @@ class LogoutView(View):
         auth.logout(request)
         messages.success(request, "You have been logged out")
         return redirect("login")
+
+
+class RequestPasswordResetEmail(View):
+    def get(self, request):
+        return render(request, "authentication/reset-password.html")
+
+    def post(self, request):
+        email = request.POST["email"]
+
+        if not validate_email(email):
+            messages.error(request, "Please enter a valid email")
+            return render(request, "authentication/reset-password.html")
+
+        user = User.objects.filter(email=email)
+
+        if user.exists():
+            uidb64 = urlsafe_base64_encode(force_bytes(user[0].pk))
+            domain = get_current_site(request).domain
+            link = reverse(
+                "reset-user-password",
+                kwargs={
+                    "uidb64": uidb64,
+                    "token": token_generator.make_token(user[0]),
+                },
+            )
+            reset_url = "http://" + domain + link
+            email_subject = "Password Reset"
+            email_body = "Hi, Use this link to reset your password\n" + reset_url
+            send_mail(
+                email_subject,
+                email_body,
+                settings.EMAIL_HOST_USER,
+                [email],
+                fail_silently=True,
+            )
+            messages.success(request, "We have sent you a link to reset your password")
+            return render(request, "authentication/reset-password.html")
+
+        messages.error(request, "No account found with this email")
+        return render(request, "authentication/reset-password.html")
