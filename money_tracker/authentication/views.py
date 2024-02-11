@@ -10,6 +10,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_str
 from .utils import token_generator
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 # from django.core.validators import validate_email
 from validate_email import validate_email
@@ -122,6 +123,61 @@ class EmailValidationView(View):
         return JsonResponse({"email_valid": True})
 
 
+class RequestPasswordResetEmail(View):
+    def get(self, request):
+        return render(request, "authentication/reset-password.html")
+
+    def post(self, request):
+        email = request.POST["email"]
+
+        context = {"values": request.POST}
+
+        if not validate_email(email):
+            messages.error(request, "Please enter a valid email")
+            return render(request, "authentication/reset-password.html", context)
+
+        current_site = get_current_site(request)
+        user = User.objects.filter(email=email)
+
+        if user.exists():
+            email_contents = {
+                "user": user[0],
+                "domain": current_site.domain,
+                "uid": urlsafe_base64_encode(force_bytes(user[0].pk)),
+                "token": PasswordResetTokenGenerator().make_token(user[0]),
+            }
+
+            link = reverse(
+                "reset-user-password",
+                kwargs={
+                    "uidb64": email_contents["uid"],
+                    "token": email_contents["token"],
+                },
+            )
+
+            email_subject = "Password Reset Instructions"
+            active_url = "http://" + current_site.domain + link
+            email_body = "Hi " + " Use this link to verify your account\n" + active_url
+            email = EmailMessage(
+                email_subject,
+                email_body,
+                settings.EMAIL_HOST_USER,
+                [email],
+            )
+            email.send(fail_silently=False)
+
+        messages.success(request, "We have sent you a link to reset your password")
+        return render(request, "authentication/reset-password.html")
+
+
+class CompletePasswordReset(View):
+    def get(self, request, uidb64, token):
+        return render(request, "authentication/set-new-password.html")
+
+    def post(self, request, uidb64, token):
+        return render(request, "authentication/set-new-password.html")
+
+
 class VerificationView(View):
     def get(self, request, uidb64, token):
         try:
@@ -182,43 +238,3 @@ class LogoutView(View):
         auth.logout(request)
         messages.success(request, "You have been logged out")
         return redirect("login")
-
-
-class RequestPasswordResetEmail(View):
-    def get(self, request):
-        return render(request, "authentication/reset-password.html")
-
-    def post(self, request):
-        email = request.POST["email"]
-
-        if not validate_email(email):
-            messages.error(request, "Please enter a valid email")
-            return render(request, "authentication/reset-password.html")
-
-        user = User.objects.filter(email=email)
-
-        if user.exists():
-            uidb64 = urlsafe_base64_encode(force_bytes(user[0].pk))
-            domain = get_current_site(request).domain
-            link = reverse(
-                "reset-user-password",
-                kwargs={
-                    "uidb64": uidb64,
-                    "token": token_generator.make_token(user[0]),
-                },
-            )
-            reset_url = "http://" + domain + link
-            email_subject = "Password Reset"
-            email_body = "Hi, Use this link to reset your password\n" + reset_url
-            send_mail(
-                email_subject,
-                email_body,
-                settings.EMAIL_HOST_USER,
-                [email],
-                fail_silently=True,
-            )
-            messages.success(request, "We have sent you a link to reset your password")
-            return render(request, "authentication/reset-password.html")
-
-        messages.error(request, "No account found with this email")
-        return render(request, "authentication/reset-password.html")
